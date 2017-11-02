@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 
 import 'package:angular2/core.dart';
 import 'package:js/js.dart';
@@ -22,10 +21,13 @@ import 'conversion.dart';
 @Component(
     selector: 'pikaday',
     template:
-        '<input type="text" id="{{id}}" class="{{cssClasses}}" placeholder="{{placeholder}}">')
+        '<input type="text" #pikadayField id="{{id}}" class="{{cssClasses}}" placeholder="{{placeholder}}">')
 class PikadayComponent implements AfterViewInit {
   static int _componentCounter = 0;
   final String id = "pikadayInput${++_componentCounter}";
+
+  @ViewChild('pikadayField')
+  ElementRef pikadayField;
 
   /// css-classes to be set on the pikaday-inputfield via <input class="{{cssClasses}}>
   @Input()
@@ -186,7 +188,7 @@ class PikadayComponent implements AfterViewInit {
 
   @override
   ngAfterViewInit() {
-    _options.field = querySelector('#$id');
+    _options.field = pikadayField.nativeElement;
     _options.onSelect = allowInterop((dateTimeOrDate) {
       var day = dateTimeOrDate is DateTime
           ? dateTimeOrDate
