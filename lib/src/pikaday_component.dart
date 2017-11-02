@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 
 import 'package:angular2/core.dart';
 import 'package:js/js.dart';
@@ -21,11 +20,13 @@ import 'conversion.dart';
 
 @Component(
     selector: 'pikaday',
-    template:
-        '<input type="text" id="{{id}}" class="{{cssClasses}}" placeholder="{{placeholder}}">')
+    template: '<input type="text" #pikadayField id="{{id}}" class="{{cssClasses}}" placeholder="{{placeholder}}">')
 class PikadayComponent implements AfterViewInit {
   static int _componentCounter = 0;
   final String id = "pikadayInput${++_componentCounter}";
+
+  @ViewChild('pikadayField')
+  ElementRef pikadayField;
 
   /// css-classes to be set on the pikaday-inputfield via <input class="{{cssClasses}}>
   @Input()
@@ -42,6 +43,7 @@ class PikadayComponent implements AfterViewInit {
 
   /// Emits selected dates.
   final _dayChange = new StreamController<DateTime>();
+
   @Output()
   Stream<DateTime> get dayChange => _dayChange.stream;
 
@@ -50,7 +52,7 @@ class PikadayComponent implements AfterViewInit {
   void set day(DateTime day) {
     if (_isInitPhase) {
       _options.defaultDate = day;
-      _options.setDefaultDate = day!=null;
+      _options.setDefaultDate = day != null;
     } else {
       var dayMillies = day?.millisecondsSinceEpoch;
       setPikadayMillisecondsSinceEpoch(_pikaday, dayMillies);
@@ -157,8 +159,7 @@ class PikadayComponent implements AfterViewInit {
   /// <bool> or <String>. Forwards to [PikadayOptions.showDaysInNextAndPreviousMonths]. Look there for more info.
   @Input()
   void set showDaysInNextAndPreviousMonths(showDaysInNextAndPreviousMonths) {
-    _options.showDaysInNextAndPreviousMonths =
-        boolValue(showDaysInNextAndPreviousMonths);
+    _options.showDaysInNextAndPreviousMonths = boolValue(showDaysInNextAndPreviousMonths);
   }
 
   /// <int> or <String>. Forwards to [PikadayOptions.numberOfMonths]. Look there for more info.
@@ -174,8 +175,7 @@ class PikadayComponent implements AfterViewInit {
     if (mainCalendar == "right" || mainCalendar == "left") {
       _options.mainCalendar = mainCalendar;
     }
-    throw new ArgumentError(
-        "should only be 'left' or 'right', but was: $mainCalendar");
+    throw new ArgumentError("should only be 'left' or 'right', but was: $mainCalendar");
   }
 
   /// Forwards to [PikadayOptions.theme]. Look there for more info.
@@ -186,12 +186,11 @@ class PikadayComponent implements AfterViewInit {
 
   @override
   ngAfterViewInit() {
-    _options.field = querySelector('#$id');
+    _options.field = pikadayField.nativeElement;
     _options.onSelect = allowInterop((dateTimeOrDate) {
       var day = dateTimeOrDate is DateTime
           ? dateTimeOrDate
-          : new DateTime.fromMillisecondsSinceEpoch(
-              getPikadayMillisecondsSinceEpoch(_pikaday));
+          : new DateTime.fromMillisecondsSinceEpoch(getPikadayMillisecondsSinceEpoch(_pikaday));
 
       if (day != _options.defaultDate) {
         _options.defaultDate = day;
@@ -204,25 +203,24 @@ class PikadayComponent implements AfterViewInit {
     // Currently Dart's DateTime is not correctly mapped to JS's Date
     // so they are converted to millies as transferred as int values.
     workaroundDateTimeConversionIssue(
-        DateTime day,
-        DateTime minDate,
-        DateTime maxDate,
-        ) {
-      if(day!=null) {
+      DateTime day,
+      DateTime minDate,
+      DateTime maxDate,
+    ) {
+      if (day != null) {
         var millies = day.millisecondsSinceEpoch;
         setPikadayMillisecondsSinceEpoch(_pikaday, millies);
       }
-      if(minDate!=null) {
+      if (minDate != null) {
         var millies = minDate.millisecondsSinceEpoch;
         setPikadayMinDateAsMillisecondsSinceEpoch(_pikaday, millies);
       }
-      if(maxDate!=null) {
+      if (maxDate != null) {
         var millies = maxDate.millisecondsSinceEpoch;
         setPikadayMaxDateAsMillisecondsSinceEpoch(_pikaday, millies);
       }
     }
-    workaroundDateTimeConversionIssue(
-        _options.defaultDate, _options.minDate, _options.maxDate
-    );
+
+    workaroundDateTimeConversionIssue(_options.defaultDate, _options.minDate, _options.maxDate);
   }
 }
