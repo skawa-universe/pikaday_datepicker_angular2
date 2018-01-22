@@ -42,7 +42,7 @@ class PikadayComponent implements AfterViewInit {
   bool get _isInitPhase => _pikaday == null;
 
   /// Emits selected dates.
-  final _dayChange = new StreamController<DateTime>();
+  final StreamController<DateTime> _dayChange = new StreamController<DateTime>();
 
   @Output()
   Stream<DateTime> get dayChange => _dayChange.stream;
@@ -188,11 +188,16 @@ class PikadayComponent implements AfterViewInit {
   ngAfterViewInit() {
     _options.field = pikadayField.nativeElement;
     _options.onSelect = allowInterop((dateTimeOrDate) {
-      var day = dateTimeOrDate is DateTime
-          ? dateTimeOrDate
-          : new DateTime.fromMillisecondsSinceEpoch(getPikadayMillisecondsSinceEpoch(_pikaday));
-
+      var day;
+      if (dateTimeOrDate != new DateTime(1970, 1, 1)) {
+        day = dateTimeOrDate is DateTime
+            ? dateTimeOrDate
+            : new DateTime.fromMillisecondsSinceEpoch(getPikadayMillisecondsSinceEpoch(_pikaday));
+      }
       if (day != _options.defaultDate) {
+        if (day == null) {
+          _pikaday.setDate(null);
+        }
         _options.defaultDate = day;
         _dayChange.add(day);
       }
@@ -223,4 +228,6 @@ class PikadayComponent implements AfterViewInit {
 
     workaroundDateTimeConversionIssue(_options.defaultDate, _options.minDate, _options.maxDate);
   }
+
+  void clear() => _pikaday.setDate(null, true);
 }
