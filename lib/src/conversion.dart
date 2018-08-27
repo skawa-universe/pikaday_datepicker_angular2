@@ -1,22 +1,23 @@
-int intValue(intOrString) {
+int intValue(dynamic intOrString) {
   if (intOrString is int) {
     return intOrString;
   } else if (intOrString is String) {
     return parseInt(intOrString);
   } else {
-    throw new ArgumentError(
+    throw ArgumentError(
         "parameter is neither int nor string: $intOrString");
   }
 }
 
 int parseInt(String intStr, [int defaultValue]) {
-  return int.parse(intStr,
-      onError: (s) => defaultValue != null
-          ? defaultValue
-          : throw new ArgumentError("couldn't convert to int: $intStr"));
+  int value = int.parse(intStr) ?? defaultValue;
+  if (value == null) {
+    throw ArgumentError("couldn't convert to int: $intStr");
+  }
+  return value;
 }
 
-bool boolValue(boolOrString) {
+bool boolValue(dynamic boolOrString) {
   if (boolOrString is bool) {
     return boolOrString;
   } else if (boolOrString is String) {
@@ -25,18 +26,18 @@ bool boolValue(boolOrString) {
     } else if (boolOrString == "false") {
       return false;
     } else {
-      throw new FormatException("couldn't convert to bool: $boolOrString");
+      throw FormatException("couldn't convert to bool: $boolOrString");
     }
   } else {
-    throw new ArgumentError(
+    throw ArgumentError(
         "parameter is neither bool nor string: $boolOrString");
   }
 }
 
-DateTime dayValue(dateOrString) {
+DateTime dayValue(dynamic dateOrString) {
   int assertUpperBound(int upperBound, String iName, int i) {
     if (i < 1 || i > upperBound) {
-      throw new ArgumentError(
+      throw ArgumentError(
           "$iName has to be inbetween 1 and $upperBound but is $i");
     }
     return i;
@@ -51,18 +52,18 @@ DateTime dayValue(dateOrString) {
         int year = parseInt(yearMonthDayStr[0]);
         int month = assertUpperBound(12, "month", parseInt(yearMonthDayStr[1]));
         int day = assertUpperBound(31, "day", parseInt(yearMonthDayStr[2]));
-        return new DateTime(year, month, day);
-      } catch (e) {}
+        return DateTime(year, month, day);
+      } finally  {}
     }
-    throw new FormatException(
+    throw FormatException(
         "parameter should have format YYYY-MM-DD but is: $dateOrString");
   } else {
-    throw new ArgumentError(
+    throw ArgumentError(
         "parameter is neither bool nor string: $dateOrString");
   }
 }
 
-dynamic /*int/List<int>*/ yearRangeValue(obj) {
+dynamic /*int/List<int>*/ yearRangeValue(dynamic obj) {
   var year;
   var years;
   if (obj is int) {
@@ -76,7 +77,7 @@ dynamic /*int/List<int>*/ yearRangeValue(obj) {
       years = obj.split(",").map(parseInt);
     }
   } else {
-    throw new ArgumentError(
+    throw ArgumentError(
         "parameter is neither int, List<int> nor string: $obj");
   }
 
@@ -87,6 +88,6 @@ dynamic /*int/List<int>*/ yearRangeValue(obj) {
   if (years.length == 2) {
     return years;
   }
-  throw new ArgumentError(
+  throw ArgumentError(
       "yearRange as a List<int> should contain 2 elements but contains $years");
 }
