@@ -11,7 +11,7 @@ import "dart:html" show HtmlElement;
 
 /// import * as moment from 'moment';
 /* WARNING: export assignment not yet supported. */
-@JS()
+@JS("exposedClasses.Pikaday")
 class Pikaday {
   // @Ignore
   external factory Pikaday(PikadayOptions options);
