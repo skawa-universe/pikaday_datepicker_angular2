@@ -21,8 +21,7 @@ import 'conversion.dart';
 @Component(
     selector: 'pikaday',
     template: '<input type="text" #pikadayField id="{{id}}" class="{{cssClasses}}" placeholder="{{placeholder}}">',
-    changeDetection: ChangeDetectionStrategy.OnPush
-)
+    changeDetection: ChangeDetectionStrategy.OnPush)
 class PikadayComponent implements AfterViewInit {
   static int _componentCounter = 0;
   final String id = "pikadayInput${++_componentCounter}";
@@ -191,7 +190,8 @@ class PikadayComponent implements AfterViewInit {
     _options.field = pikadayField;
     _options.onSelect = allowInterop((dateTimeOrDate) {
       var day;
-      if (dateTimeOrDate != DateTime(1970, 1, 1)) {
+      print('day: $day || ${day.runtimeType}');
+      if (DateTime(1970, 1, 1) != dateTimeOrDate) {
         day = dateTimeOrDate is DateTime
             ? dateTimeOrDate
             : DateTime.fromMillisecondsSinceEpoch(getPikadayMillisecondsSinceEpoch(_pikaday));
