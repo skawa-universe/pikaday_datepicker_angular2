@@ -152,7 +152,7 @@ abstract class PikadayOptions {
         num numberOfMonths,
         String mainCalendar,
         String theme,
-        VoidFunc1<DateTime> onSelect,
+        VoidFunc1 onSelect,
         VoidFunc0 onOpen,
         VoidFunc0 onClose,
         VoidFunc0 onDraw,
@@ -277,8 +277,8 @@ abstract class PikadayOptions {
   external set theme(String v);
 
   /// Callback function for when a date is selected.
-  external VoidFunc1<DateTime> get onSelect;
-  external set onSelect(VoidFunc1<DateTime> v);
+  external VoidFunc1 get onSelect;
+  external set onSelect(VoidFunc1 v);
 
   /// Callback function for when the picker becomes visible.
   external VoidFunc0 get onOpen;

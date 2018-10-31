@@ -189,7 +189,6 @@ class PikadayComponent implements AfterViewInit {
   void ngAfterViewInit() {
     _options.field = pikadayField;
     _options.onSelect = allowInterop(([dateTimeOrDate]) {
-      print('day: $dateTimeOrDate || ${dateTimeOrDate?.runtimeType}');
       var day;
       if (DateTime(1970, 1, 1) != dateTimeOrDate) {
         day = dateTimeOrDate is DateTime
