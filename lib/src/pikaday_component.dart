@@ -20,7 +20,7 @@ import 'conversion.dart';
 
 @Component(
     selector: 'pikaday',
-    template: '<input type="text" #pikadayField id="{{id}}" class="{{cssClasses}}" placeholder="{{placeholder}}">',
+    template: '<input type="text" autocomplete="off" #pikadayField id="{{id}}" class="{{cssClasses}}" placeholder="{{placeholder}}">',
     changeDetection: ChangeDetectionStrategy.OnPush)
 class PikadayComponent implements AfterViewInit {
   static int _componentCounter = 0;
@@ -38,7 +38,7 @@ class PikadayComponent implements AfterViewInit {
   String placeholder;
 
   Pikaday _pikaday;
-  final _options = PikadayOptions();
+  final _options = PikadayOptions(firstDay: 1);
 
   bool get _isInitPhase => _pikaday == null;
 
