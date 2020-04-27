@@ -82,7 +82,6 @@ class PikadayComponent implements AfterViewInit {
   @Input()
   set format(String format) {
     _options.format = format;
-    print("pikaday format set to $format");
   }
 
   /// <int> or <String>. Forwards to [PikadayOptions.firstDay]. Look there for more info.
