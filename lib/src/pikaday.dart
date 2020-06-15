@@ -15,7 +15,6 @@ import "dart:html" show HtmlElement;
 class Pikaday {
   // @Ignore
   external factory Pikaday(PikadayOptions options);
-  Pikaday.fakeConstructor$();
   external HtmlElement get el;
   external set el(HtmlElement v);
 
